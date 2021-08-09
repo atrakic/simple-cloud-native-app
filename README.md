@@ -49,5 +49,19 @@ replicaset.apps/simple-cloud-native-app-7cdbf5f794   3         3         3      
 - Run app
 
 ```
+# list all items
 $ curl -sSL http://$INGRESS_HOST
+
+# get item 
+$ curl -sSL http://$INGRESS_HOST/api/v1/2
+
+# add new item if not exits (new items cleared after each redeploy)
+$ curl -sSL -XPOST -d'{"id": "22", "name": "foo.bar"}' -H 'Content-type: application/json' http://$INGRESS_HOST/api/v1/add
+
+# prints runtime version
+$ curl -sSL -XGET http://$INGRESS_HOST/version
+
+# total number of 
+$ curl -sSL -XGET -H "Content-type: application/json" http://$INGRESS_HOST:80 | jq -S "length"
+
 ```
