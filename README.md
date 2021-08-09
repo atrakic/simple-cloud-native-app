@@ -1,6 +1,6 @@
-# jobsites-api
-[![ci](https://github.com/atrakic/jobsites-api/actions/workflows/ci.yml/badge.svg)](https://github.com/atrakic/jobsites-api/actions/workflows/ci.yml)
-[![release](https://github.com/atrakic/jobsites-api/actions/workflows/release.yml/badge.svg)](https://github.com/atrakic/jobsites-api/actions/workflows/release.yml)
+# simple-cloud-native-app
+[![ci](https://github.com/atrakic/simple-cloud-native-app/actions/workflows/ci.yml/badge.svg)](https://github.com/atrakic/simple-cloud-native-app/actions/workflows/ci.yml)
+[![release](https://github.com/atrakic/simple-cloud-native-app/actions/workflows/release.yml/badge.svg)](https://github.com/atrakic/simple-cloud-native-app/actions/workflows/release.yml)
 
 A sample repository with as-simple-as-possible demonstration of running and deploying cloud native (Flask) app on kubernetes.
 ![Kubernetes app](docs/img/flask_app_with_3_replicas.png)
@@ -31,18 +31,18 @@ A sample repository with as-simple-as-possible demonstration of running and depl
 ```
 $ kubectl -n prod get all
 NAME                                READY   STATUS    RESTARTS   AGE
-pod/jobsites-api-7cdbf5f794-cvscr   1/1     Running   0          38m
-pod/jobsites-api-7cdbf5f794-z79m2   1/1     Running   0          38m
-pod/jobsites-api-7cdbf5f794-hv9hn   1/1     Running   0          38m
+pod/simple-cloud-native-app-7cdbf5f794-cvscr   1/1     Running   0          38m
+pod/simple-cloud-native-app-7cdbf5f794-z79m2   1/1     Running   0          38m
+pod/simple-cloud-native-app-7cdbf5f794-hv9hn   1/1     Running   0          38m
 
 NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
-service/jobsites-api   ClusterIP   10.43.249.228   <none>        80/TCP    38m
+service/simple-cloud-native-app   ClusterIP   10.43.249.228   <none>        80/TCP    38m
 
 NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/jobsites-api   3/3     3            3           38m
+deployment.apps/simple-cloud-native-app   3/3     3            3           38m
 
 NAME                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/jobsites-api-7cdbf5f794   3         3         3       38m
+replicaset.apps/simple-cloud-native-app-7cdbf5f794   3         3         3       38m
 ```
 
 - Run
