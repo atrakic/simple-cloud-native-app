@@ -5,28 +5,29 @@
 A sample repository with as-simple-as-possible demonstration of running and deploying cloud native (Flask) app on kubernetes.
 ![Kubernetes app](docs/img/flask_app_with_3_replicas.png)
 
-## Deployment with Github Actions
-* Actions used:
+## Deployment
+* GH actions used:
   * actions/checkout
   * docker/login-action
   * docker/metadata-action
   * docker/build-push-action
   * azure/k8s-set-context
 
-* Adjust environment variables:
-  * [ci](.github/workflows/ci.yml) spins up a throw-away [k3d single cluster](https://github.com/AbsaOSS/k3d-action) 
-  * [release](.github/workflows/release.yml)
+* GH Workflows:
+  * [test.yml](.github/workflows/test.yml) lint, functional tests (TODO), etc.
+  * [ci](.github/workflows/ci.yml) runs on each PR spins up a throw-away [k3d single cluster](https://github.com/AbsaOSS/k3d-action) and deploys flask app
+  * [release](.github/workflows/release.yml) from main branch deploys flask app on k8s
 
-* To deploy container image on create [github secrets](https://docs.github.com/en/actions/reference/encrypted-secrets):
+* To deploy container image create [github secrets](https://docs.github.com/en/actions/reference/encrypted-secrets):
   * [DOCKERHUB_USERNAME](https://docs.docker.com/docker-id/)
   * [DOCKERHUB_TOKEN](https://docs.docker.com/docker-hub/access-tokens/)
 
-* To deploy with custom [deployment script]() on your k8s cluster create additional github secrets:
+* To deploy app with [deployment script](scripts/deploy.sh) on your k8s own cluster, create additional github secrets:
   * [KUBE_CONFIG](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)
   * [INGRESS_HOST](https://kubernetes.io/docs/concepts/services-networking/ingress/#name-based-virtual-hosting)
 
 ## Demo
-- After deployment:
+- Production deployment:
 
 ```
 $ kubectl -n prod get all
@@ -45,7 +46,7 @@ NAME                                      DESIRED   CURRENT   READY   AGE
 replicaset.apps/simple-cloud-native-app-7cdbf5f794   3         3         3       38m
 ```
 
-- Run
+- Run app
 
 ```
 $ curl -sSL http://$INGRESS_HOST
