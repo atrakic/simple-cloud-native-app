@@ -1,0 +1,53 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: xomodo/jobsites-api
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            maintainer=Admir Trakic <xomodo@gmail.com>
+      - name: Build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ env.IMAGE_NAME }}:latest
+      - uses: azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      - name: Deploy
+        run: |
+          export NS=prod
+          export APP=jobsites-api
+          export IMAGE=${{ env.IMAGE_NAME }}:latest
+          export RS=3
+          export INGRESS_HOST=${{ secrets.INGRESS_HOST }}
+          ./scripts/deploy.sh
+      - name: Run app
+        run: |
+          curl -sSL ${{ secrets.INGRESS_HOST }}

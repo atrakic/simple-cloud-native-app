@@ -1,0 +1,6 @@
+site_name: Cloud native app demo
+theme: readthedocs
+
+nav:
+- Home: index.md
+- Demo: demo.md

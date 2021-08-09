@@ -1,0 +1,21 @@
+kind: Simple
+apiVersion: k3d.io/v1alpha2
+name: cloud-native-app-demo
+image: rancher/k3s:latest
+ports:
+- port: 80:80
+  nodeFilters:
+  - loadbalancer
+- port: 443:443
+  nodeFilters:
+  - loadbalancer
+options:
+  k3d:
+    wait: true
+    timeout: "60s"
+  k3s:
+    extraServerArgs:
+      - --no-deploy=metrics-server
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
