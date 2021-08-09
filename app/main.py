@@ -1,6 +1,6 @@
 import sys
 from flask import Flask
-from flask import jsonify, redirect, url_for
+from flask import jsonify, redirect, url_for, request
 
 data = [
     {"id": "0", "name": "google.com"},
@@ -9,21 +9,36 @@ data = [
     {"id": "3", "name": "LinkedIn.com"},
 ]
 
+limit = 10
+
 app = Flask(__name__)
 
 
 @app.route("/")
 def index():
-    return redirect(url_for("jobsites", id="0"))
+    return redirect(url_for("all"))
 
 
 @app.route("/api/v1/<id>", methods=["GET"])
-def jobsites(id):
+def get(id):
     return jsonify(list(filter(lambda x: x["id"] == id, data)))
 
 
+@app.route("/api/v1/add", methods=["POST"])
+def add():
+    req = request.get_json(force=True)
+    if not any(d["id"] == req["id"] for d in data) and len(data) < limit:
+        data.append({"id": req["id"], "name": req["name"]})
+    return jsonify(data)
+
+
+@app.route("/api/v1/all", methods=["GET"])
+def all():
+    return jsonify(data)
+
+
 @app.route("/version")
-def hello():
+def version():
     version = "{}.{}".format(sys.version_info.major, sys.version_info.minor)
     return jsonify(
         version=version,
