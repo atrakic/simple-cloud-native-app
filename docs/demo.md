@@ -1,3 +1,5 @@
 # Demo
 
-- [Github actions](https://github.com/atrakic/cloud-native-app-demo/actions)
+![CICD](img/cicd.png)
+
+- [Simple cloud native app](https://github.com/atrakic/simple-cloud-native-app)

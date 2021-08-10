@@ -24,7 +24,7 @@ test: up
 	sleep 1
 	[ -f ./tests/test.sh ] && ./tests/test.sh || true
 
-clean: stop 
+clean: stop
 	docker-compose down --volumes --remove-orphans
 
 -include include.mk
