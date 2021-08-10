@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-APP=${APP:?'You need to configure the APP environment variable!'}
-IMAGE=${IMAGE:?'You need to configure the IMAGE environment variable!'}
-NS=${NS:=default} # default is used in test cluster
-RS=${RS:=1}
+: "${APP:?'You need to configure the APP environment variable!'}"
+: "${IMAGE:?'You need to configure the IMAGE environment variable!'}"
+: "${NS:=default}"
+: "${RS:=1}"
 
 set -e
 set -o pipefail
 
 main() {
+  kubectl config current-context
   kubectl cluster-info
 
   [[ ${NS} != "default" ]] && { kubectl create namespace "$NS" || true; }
@@ -16,6 +17,7 @@ main() {
   kubectl --namespace "$NS" create deployment "$APP" --image "$IMAGE" --replicas="$RS" --dry-run=client -o yaml | grep -Ev "status|creationTimestamp" | kubectl apply -f -
   [[ ${NS} != "default" ]] && { kubectl --namespace "$NS" rollout restart deployment "$APP"; }
   kubectl --namespace "$NS" rollout status deployment "$APP"
+  kubectl --namespace "$NS" rollout history deployment/"$APP"
   kubectl --namespace "$NS" get all -o wide
 
   if [[ -n $INGRESS_HOST ]]; then
