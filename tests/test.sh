@@ -11,7 +11,7 @@ main(){
   for i in $(seq 10);
   do
     HTTP_CODE=$(curl -sSL -o /dev/null -w "%{http_code}" --connect-timeout 5 "http://$uri")
-    if [[ "$HTTP_CODE" == "200" ]] || [[ "$HTTP_CODE" == "302" ]]; 
+    if [[ "$HTTP_CODE" == "200" ]] || [[ "$HTTP_CODE" == "302" ]];
     then
       res=$(
           curl -sSL -XGET \

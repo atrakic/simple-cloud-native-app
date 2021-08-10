@@ -1,6 +1,6 @@
 import sys
-from flask import Flask
-from flask import jsonify, redirect, url_for, request
+
+from flask import Flask, jsonify, redirect, request, url_for
 
 data = [
     {"id": "0", "name": "google.com"},

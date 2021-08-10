@@ -1,5 +1,5 @@
-pytest
-pytest-cov
-flake8
 black
 diagrams
+flake8
+pytest
+pytest-cov
