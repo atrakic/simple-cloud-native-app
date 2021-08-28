@@ -1,3 +1,5 @@
+mkdocs
+pre-commit
 black
 diagrams
 flake8

@@ -6,7 +6,7 @@ APP := cloud-native-app-demo
 .PHONY: up logs status stop mkdocs test clean
 
 up:
-	docker-compose up --no-deps --remove-orphans -d
+	docker-compose up --build --no-deps --remove-orphans -d
 
 logs:
 	docker-compose logs -f
