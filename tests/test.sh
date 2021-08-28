@@ -5,7 +5,7 @@ set -o pipefail
 [[ -n $DEBUG ]] && set -x
 
 app=${APP:-demo}
-uri=${uri:-localhost}
+uri=${uri:-localhost:5000}
 
 main(){
   for i in $(seq 10);

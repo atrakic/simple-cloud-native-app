@@ -4,6 +4,7 @@
 : "${IMAGE:?'You need to configure the IMAGE environment variable!'}"
 : "${NS:=default}"
 : "${RS:=1}"
+: "${PORT:=80}"
 
 set -e
 set -o pipefail
@@ -13,11 +14,13 @@ main() {
   kubectl cluster-info
 
   [[ ${NS} != "default" ]] && { kubectl create namespace "$NS" || true; }
-  kubectl --namespace "$NS" create service clusterip "$APP" --tcp=80:80 --dry-run=client -o yaml | grep -Ev "creationTimestamp" |  kubectl apply -f -
+
   kubectl --namespace "$NS" create deployment "$APP" --image "$IMAGE" --replicas="$RS" --dry-run=client -o yaml | grep -Ev "status|creationTimestamp" | kubectl apply -f -
-  [[ ${NS} != "default" ]] && { kubectl --namespace "$NS" rollout restart deployment "$APP"; }
   kubectl --namespace "$NS" rollout status deployment "$APP"
+  [[ ${NS} != "default" ]] && { kubectl --namespace "$NS" rollout restart deployment "$APP"; }
   kubectl --namespace "$NS" rollout history deployment/"$APP"
+
+  kubectl --namespace "$NS" create service clusterip "$APP" --tcp=80:"$PORT" --dry-run=client -o yaml | grep -Ev "creationTimestamp" |  kubectl apply -f -
   kubectl --namespace "$NS" get all -o wide
 
   if [[ -n $INGRESS_HOST ]]; then
