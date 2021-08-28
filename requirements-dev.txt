@@ -3,6 +3,5 @@ diagrams
 flake8
 mkdocs
 pre-commit
-pre-commit
 pytest
 pytest-cov

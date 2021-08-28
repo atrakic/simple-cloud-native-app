@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+        "type": "docker-run",
+        "label": "docker-run: debug",
+        "dependsOn": [
+            "docker-build"
+        ],
+        "dockerRun": {
+            "volumes": [
+                {
+                  "containerPath": "/app", "localPath": "${workspaceFolder}"
+                }
+              ],
+            "env": {
+                "FLASK_APP": "app/main.py",
+                "FLASK_ENV": "development"
+            }
+        },
+        "python": {
+            "args": [
+                "run",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "5000"
+            ],
+            "module": "flask"
+        }
+    },
+    {
+        "type": "docker-build",
+        "label": "docker-build",
+        "platform": "python",
+        "dockerBuild": {
+            "tag": "simplecloudnativeapp:latest",
+            "dockerfile": "${workspaceFolder}/Dockerfile",
+            "context": "${workspaceFolder}",
+            "pull": true
+        }
+    }
+]
+}
+

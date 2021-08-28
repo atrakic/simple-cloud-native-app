@@ -2,3 +2,8 @@ version: '3'
 services:
   web:
     build: ./
+    working_dir: /mnt
+    volumes:
+      - .:/mnt
+    ports:
+      - 5000:5000

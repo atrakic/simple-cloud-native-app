@@ -44,20 +44,23 @@ jobs:
       - name: Create a cluster
         uses: AbsaOSS/k3d-action@v1.5.0
         with:
-          cluster-name: test
+          cluster-name: ci
           args: >-
             --config k3d.yaml
+      - name: Set env vars
+        run: |
+          # Make the variables available in follow-up steps
+          echo "PORT=5000" >> $GITHUB_ENV
+          echo "APP=cloud-native-app-demo" >> $GITHUB_ENV
       - name: Deploy on k3d
         run: |
           set -x
-          export APP=cloud-native-app-demo-test
-          export IMAGE=${{ env.IMAGE_NAME }}:dev
-          ./scripts/deploy.sh
+          APP=${{ env.APP }} IMAGE=${{ env.IMAGE_NAME }}:dev PORT=${{ env.PORT }} ./scripts/deploy.sh
           set +x
-      - name: Test
+      - name: Pod test
         run: |
           set -x
-          export POD=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -l "app=cloud-native-app-demo-test")
+          export POD=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -l "app=${{ env.APP }}")
           kubectl exec -it "$POD" -- printenv
-          kubectl run --rm curl-test --image radial/busyboxplus:curl -i --restart Never -- sh -c "curl -sSL cloud-native-app-demo-test"
+          kubectl run --rm curl-test --image radial/busyboxplus:curl -i --restart Never -- sh -c "curl -sSL --fail ${{ env.APP }}"
           set +x

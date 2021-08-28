@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-# TODO: pytest tests
+#python -m pytest tests/

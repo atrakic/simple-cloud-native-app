@@ -45,8 +45,9 @@ jobs:
           export NS=prod
           export APP=jobsites-api
           export IMAGE=${{ env.IMAGE_NAME }}:latest
-          export RS=3
           export INGRESS_HOST=${{ secrets.INGRESS_HOST }}
+          export RS=3
+          export PORT=5000
           ./scripts/deploy.sh
       - name: Run app
         run: |
