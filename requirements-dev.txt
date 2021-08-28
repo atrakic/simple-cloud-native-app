@@ -1,8 +1,7 @@
-mkdocs
-pre-commit
 black
 diagrams
 flake8
+mkdocs
 pre-commit
 pytest
 pytest-cov
