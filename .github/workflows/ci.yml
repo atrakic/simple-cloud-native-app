@@ -42,7 +42,7 @@ jobs:
             ${{ steps.meta.outputs.tags }}
             ${{ env.IMAGE_NAME }}:dev
       - name: Create a cluster
-        uses: AbsaOSS/k3d-action@v1.5.0
+        uses: AbsaOSS/k3d-action@v1.6.0
         with:
           cluster-name: ci
           args: >-
