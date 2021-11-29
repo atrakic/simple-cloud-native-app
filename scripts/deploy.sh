@@ -15,12 +15,12 @@ main() {
 
   [[ ${NS} != "default" ]] && { kubectl create namespace "$NS" || true; }
 
-  kubectl --namespace "$NS" create deployment "$APP" --image "$IMAGE" --replicas="$RS" --dry-run=client -o yaml | grep -Ev "status|creationTimestamp" | kubectl apply -f -
+  kubectl --namespace "$NS" create deployment "$APP" --image "$IMAGE" --replicas="$RS" --dry-run=client -o yaml | sed -n '/status/q;p' | grep -Ev "creationTimestamp" | kubectl apply -f -
   kubectl --namespace "$NS" rollout status deployment "$APP"
   [[ ${NS} != "default" ]] && { kubectl --namespace "$NS" rollout restart deployment "$APP"; }
   kubectl --namespace "$NS" rollout history deployment/"$APP"
 
-  kubectl --namespace "$NS" create service clusterip "$APP" --tcp=80:"$PORT" --dry-run=client -o yaml | grep -Ev "creationTimestamp" |  kubectl apply -f -
+  kubectl --namespace "$NS" create service clusterip "$APP" --tcp=80:"$PORT" --dry-run=client -o yaml | sed -n '/status/q;p' | grep -Ev "creationTimestamp" | kubectl apply -f -
   kubectl --namespace "$NS" get all -o wide
 
   if [[ -n $INGRESS_HOST ]]; then
