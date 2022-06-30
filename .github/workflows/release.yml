@@ -36,7 +36,7 @@ jobs:
           tags: |
             ${{ steps.meta.outputs.tags }}
             ${{ env.IMAGE_NAME }}:latest
-      - uses: azure/k8s-set-context@v1
+      - uses: azure/k8s-set-context@v3
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
